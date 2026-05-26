@@ -1,5 +1,7 @@
 # Swarms Marketplace Submission
 
+Full registration instructions now live in `REGISTER.md`.
+
 ## Selected name
 
 RLS Shield
