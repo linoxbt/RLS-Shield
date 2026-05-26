@@ -1,0 +1,24 @@
+{
+  "name": "rls-shield-agent",
+  "version": "1.0.0",
+  "description": "RLS Shield is a Swarms hackathon agent that turns DeFi scanner findings into prioritized patches, verification commands, and marketplace-ready security reports.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "rls-shield": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "demo": "node src/index.js --demo",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "swarms",
+    "defi",
+    "security",
+    "supabase",
+    "rls",
+    "audit"
+  ],
+  "license": "MIT"
+}
