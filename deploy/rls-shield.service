@@ -1,0 +1,17 @@
+[Unit]
+Description=RLS Shield security triage agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/synapsemesh-agent/hackathon/security-agent
+Environment=PYTHONUNBUFFERED=1
+Environment=RLS_SHIELD_HOST=0.0.0.0
+Environment=RLS_SHIELD_PORT=8091
+ExecStart=/usr/bin/python3 /root/synapsemesh-agent/hackathon/security-agent/server.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

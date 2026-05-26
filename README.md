@@ -99,6 +99,33 @@ Change host/port:
 RLS_SHIELD_HOST=0.0.0.0 RLS_SHIELD_PORT=8091 python3 server.py
 ```
 
+## Live VPS Deployment
+
+Current live endpoints:
+
+```text
+Health: http://144.91.76.243:8091/health
+Demo:   http://144.91.76.243:8091/demo
+Triage: http://144.91.76.243:8091/triage
+```
+
+## Run As A Systemd Service
+
+Install the service unit:
+
+```bash
+sudo install -m 644 deploy/rls-shield.service /etc/systemd/system/rls-shield.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now rls-shield.service
+```
+
+Check status and logs:
+
+```bash
+systemctl status rls-shield.service
+journalctl -u rls-shield.service -n 100 --no-pager
+```
+
 ## Swarms Marketplace
 
 Use `rls_shield_agent.py` as the direct agent code in the Swarms launch form.

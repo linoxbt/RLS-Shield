@@ -192,10 +192,14 @@ Live Demo
 URL:
 
 ```text
-http://YOUR_VPS_IP:8091/demo
+http://144.91.76.243:8091/demo
 ```
 
-Replace `YOUR_VPS_IP` with the server IP only if the port is publicly reachable.
+The live health endpoint is:
+
+```text
+http://144.91.76.243:8091/health
+```
 
 ## Pricing And Tokenization
 
