@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="RLS Shield turns DeFi scanner findings into prioritized Supabase RLS, webhook, and database security remediation plans."
+    />
+    <title>RLS Shield | Row-Level Security Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="RLS Shield home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="img">
+              <path d="M24 4 8 10v12c0 10.2 6.5 18.5 16 22 9.5-3.5 16-11.8 16-22V10L24 4Z" />
+              <path d="M16 18h16M16 24h16M16 30h10" />
+            </svg>
+          </span>
+          <span>
+            <strong>RLS Shield</strong>
+            <small>Row-Level Security Agent</small>
+          </span>
+        </a>
+        <nav class="top-actions" aria-label="Project links">
+          <a href="https://github.com/linoxbt/RLS-Shield" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="http://144.91.76.243:8091/demo" target="_blank" rel="noreferrer">Live Demo</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow">DeFi security triage for Supabase and Postgres</div>
+            <h1>Convert scanner findings into launch-ready remediation plans.</h1>
+            <p>
+              Paste RLS warnings, webhook risks, or database linter output. RLS Shield ranks the risk,
+              assigns owners, and returns concrete patch and verification steps.
+            </p>
+            <div class="hero-actions">
+              <button class="primary-action" id="load-sample" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5v14l11-7-11-7Z" />
+                </svg>
+                Load sample
+              </button>
+              <button class="secondary-action" id="clear-input" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+                </svg>
+                Clear
+              </button>
+            </div>
+          </div>
+          <div class="status-panel" aria-label="Runtime status">
+            <div class="status-row">
+              <span>Runtime</span>
+              <strong>Vercel API + VPS demo</strong>
+            </div>
+            <div class="status-row">
+              <span>External API keys</span>
+              <strong>Not required</strong>
+            </div>
+            <div class="status-row">
+              <span>Token</span>
+              <strong>RLSX</strong>
+            </div>
+            <div class="status-row">
+              <span>Endpoint</span>
+              <strong id="health-state">Checking...</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace" aria-label="RLS Shield analysis workspace">
+          <div class="input-pane">
+            <div class="pane-heading">
+              <div>
+                <h2>Scanner Input</h2>
+                <p>Paste raw scanner output, Supabase warnings, or issue summaries.</p>
+              </div>
+              <span id="input-count">0 chars</span>
+            </div>
+            <textarea
+              id="scanner-input"
+              spellcheck="false"
+              placeholder="Paste security scanner findings here..."
+            ></textarea>
+            <div class="input-actions">
+              <button class="primary-action" id="run-triage" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z" />
+                </svg>
+                Run triage
+              </button>
+              <button class="secondary-action" id="copy-json" type="button" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 8h10v12H8zM6 16H4V4h12v2" />
+                </svg>
+                Copy JSON
+              </button>
+            </div>
+          </div>
+
+          <div class="results-pane">
+            <div class="pane-heading">
+              <div>
+                <h2>Remediation Report</h2>
+                <p id="report-subtitle">Run the agent to generate findings.</p>
+              </div>
+              <span class="run-state" id="run-state">Ready</span>
+            </div>
+
+            <div class="metrics" aria-label="Severity summary">
+              <div class="metric">
+                <span>Total</span>
+                <strong id="metric-total">0</strong>
+              </div>
+              <div class="metric critical">
+                <span>Critical</span>
+                <strong id="metric-critical">0</strong>
+              </div>
+              <div class="metric high">
+                <span>High</span>
+                <strong id="metric-high">0</strong>
+              </div>
+              <div class="metric medium">
+                <span>Medium</span>
+                <strong id="metric-medium">0</strong>
+              </div>
+            </div>
+
+            <div class="next-actions" id="next-actions" hidden>
+              <h3>Recommended execution order</h3>
+              <ol id="next-actions-list"></ol>
+            </div>
+
+            <div class="empty-state" id="empty-state">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M32 6 12 14v15c0 13 8 23 20 29 12-6 20-16 20-29V14L32 6Z" />
+                <path d="M22 27h20M22 35h14" />
+              </svg>
+              <h3>No report yet</h3>
+              <p>Load the sample or paste your own findings, then run triage.</p>
+            </div>
+
+            <div class="finding-list" id="finding-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="finding-template">
+      <article class="finding-card">
+        <div class="finding-header">
+          <span class="severity-pill"></span>
+          <span class="owner"></span>
+        </div>
+        <h3></h3>
+        <p class="impact"></p>
+        <p class="context"></p>
+        <div class="check-grid">
+          <section>
+            <h4>Patch checklist</h4>
+            <ul class="patches"></ul>
+          </section>
+          <section>
+            <h4>Verification</h4>
+            <ul class="verification"></ul>
+          </section>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

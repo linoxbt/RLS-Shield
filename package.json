@@ -10,7 +10,9 @@
   "scripts": {
     "start": "node src/index.js",
     "demo": "node src/index.js --demo",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "dev": "vercel dev",
+    "serve:web": "npx serve ."
   },
   "keywords": [
     "swarms",

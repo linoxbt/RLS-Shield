@@ -12,6 +12,7 @@ The agent is designed for builders who need a practical release-readiness review
 - Produces verification checks for QA, CI, or release review.
 - Runs without external AI APIs, model keys, databases, or paid services.
 - Works as direct Python code, a local CLI-style script, or a small HTTP service.
+- Ships with a Vercel-ready web UI and serverless API routes.
 
 ## Current Playbooks
 
@@ -27,6 +28,10 @@ The agent is designed for builders who need a practical release-readiness review
 .
 ├── rls_shield_agent.py      # Paste-ready Swarms Marketplace agent code
 ├── server.py                # Dependency-free HTTP server wrapper
+├── index.html               # Vercel-ready web UI
+├── app.js                   # Browser-side UI behavior
+├── styles.css               # Professional dashboard styling
+├── api/                     # Vercel serverless API routes
 ├── REGISTER.md             # Exact Swarms registration fields
 ├── src/                    # Node CLI version used during local development
 ├── test/                   # Node tests
@@ -157,6 +162,35 @@ Optional Node development tests:
 
 ```bash
 npm test
+```
+
+## Deploy On Vercel
+
+RLS Shield can be deployed directly from the GitHub repository.
+
+1. Import `https://github.com/linoxbt/RLS-Shield` into Vercel.
+2. Keep the framework preset as `Other`.
+3. Leave build command empty.
+4. Leave output directory empty.
+5. Deploy.
+
+The Vercel app serves:
+
+```text
+/              Web UI
+/api/health    Serverless health check
+/api/demo      Serverless sample report
+/api/triage    Serverless POST endpoint
+```
+
+No environment variables are required.
+
+Example API request:
+
+```bash
+curl -X POST https://YOUR-VERCEL-DOMAIN.vercel.app/api/triage \
+  -H "Content-Type: application/json" \
+  -d '{"scanner_output":"Public Can Execute SECURITY DEFINER Function without signing in."}'
 ```
 
 ## Security Notes

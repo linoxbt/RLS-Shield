@@ -22,6 +22,7 @@ RLS Shield does not require any external API key to run.
 - No OpenAI, Anthropic, Groq, Supabase, Circle, or database key is required.
 - No package dependencies are required.
 - Swarms wallet connection is still required in the web UI to tokenize and list the product.
+- The optional web UI is deployable on Vercel and also does not require environment variables.
 
 The Swarms API is only relevant if you are building with Swarms Cloud API separately. For this marketplace launch, use the Swarms web launch form.
 
@@ -199,6 +200,18 @@ The live health endpoint is:
 
 ```text
 http://144.91.76.243:8091/health
+```
+
+Optional third link name after Vercel deployment:
+
+```text
+Web UI
+```
+
+URL:
+
+```text
+https://YOUR-VERCEL-DOMAIN.vercel.app
 ```
 
 ## Pricing And Tokenization

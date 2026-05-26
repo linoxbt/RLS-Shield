@@ -10,11 +10,13 @@ from __future__ import annotations
 import json
 import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
 from rls_shield_agent import triage_security_findings
 
+ROOT = Path(__file__).resolve().parent
 SAMPLE_FINDINGS = """
 Circle Webhook Accepts Unauthenticated Requests When Secret Is Unset.
 The earnings_calls_select_full_content policy allows rows where price_usdc <= 0.
@@ -36,6 +38,15 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[s
     handler.wfile.write(body)
 
 
+def _file_response(handler: BaseHTTPRequestHandler, path: Path, content_type: str) -> None:
+    body = path.read_bytes()
+    handler.send_response(200)
+    handler.send_header("Content-Type", content_type)
+    handler.send_header("Content-Length", str(len(body)))
+    handler.end_headers()
+    handler.wfile.write(body)
+
+
 class RLSShieldHandler(BaseHTTPRequestHandler):
     """Serve RLS Shield over HTTP."""
 
@@ -51,7 +62,19 @@ class RLSShieldHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         path = urlparse(self.path).path
-        if path == "/health":
+        if path in ("/", "/index.html"):
+            _file_response(self, ROOT / "index.html", "text/html; charset=utf-8")
+            return
+
+        if path == "/styles.css":
+            _file_response(self, ROOT / "styles.css", "text/css; charset=utf-8")
+            return
+
+        if path == "/app.js":
+            _file_response(self, ROOT / "app.js", "text/javascript; charset=utf-8")
+            return
+
+        if path in ("/health", "/api/health"):
             _json_response(
                 self,
                 200,
@@ -64,7 +87,7 @@ class RLSShieldHandler(BaseHTTPRequestHandler):
             )
             return
 
-        if path == "/demo":
+        if path in ("/demo", "/api/demo"):
             _json_response(self, 200, triage_security_findings(SAMPLE_FINDINGS))
             return
 
@@ -79,7 +102,7 @@ class RLSShieldHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
-        if path != "/triage":
+        if path not in ("/triage", "/api/triage"):
             _json_response(self, 404, {"error": "Not found", "routes": ["POST /triage"]})
             return
 
